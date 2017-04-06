@@ -72,6 +72,16 @@ int inTree(int * check, struct node * parent, int i) {
 
 }
 
+void removeNode (struct node * node) {
+	if(node == NULL)
+	 return;
+	if(node->left != NULL)
+		removeNode(node->left);
+	if(node->right != NULL)
+		removeNode(node->right);
+	free(node);
+}
+
 int main(int argc, char ** argv) {
 	//check if numbers exist from huge file
 	//build trie
@@ -91,7 +101,9 @@ int main(int argc, char ** argv) {
 		int * binary = numberToBinary(num, places);
 	
 		insertIntoTree(binary, head, places - 1);
-
+		
+		free(binary);
+	
 		//get next int
 		fscanf(fp, "%d", &num);
 	}
@@ -106,6 +118,10 @@ int main(int argc, char ** argv) {
 	int value = inTree(check, head, places - 1);
 
 	printf("%s\n", (value == 1)?"Value found in file!":"Value not in file.");
+	
+	fclose(fp);
+	removeNode(head);
+
 
 	return 0;
 }
